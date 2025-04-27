@@ -1,0 +1,3610 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vårdbasen.se</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6B9B91;
+            --secondary-color: #7fb3a8;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #dae5e3;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+            --background-light: #f8f8f8;
+            --background-accent: rgba(51, 51, 51, 0.03);
+            --border-accent: rgba(51, 51, 51, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-accent);
+            box-shadow: 0 2px 10px rgba(51, 51, 51, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-right: 2rem;
+        }
+
+        .header-button {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            box-sizing: border-box;
+            line-height: 1.2;
+        }
+
+        .header-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .admin-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .admin-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .logo-container {
+            width: auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            height: 25%;
+            width: auto;
+            object-fit: contain;
+            cursor: pointer;
+            transform: scale(8);
+            transform-origin: left center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-right: 2rem;
+        }
+
+        .nav-button {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .nav {
+            background: none;
+            border: none;
+            padding: 0;
+            box-shadow: none;
+            margin-left: auto;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .header p {
+            display: none;
+        }
+
+        .container {
+            width: 100%;
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+        }
+
+        #jobs {
+            background-color: #f5f5f5;
+            padding: 2rem 0;
+        }
+
+        #jobs .container {
+            max-width: none;
+            width: 100%;
+            padding: 0 4rem;
+        }
+
+        #jobs .job-listing {
+            background: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #jobs .job-listing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            background: var(--white);
+        }
+
+        #jobs .section-title {
+            color: var(--white);
+        }
+
+        .job-title {
+            color: var(--text-color);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-company {
+            color: var(--text-color);
+            font-weight: 600;
+            padding: 0.3rem 0.8rem;
+            background: rgba(107, 155, 145, 0.1);
+            border: 1px solid var(--border-accent);
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .job-details {
+            background: rgba(107, 155, 145, 0.05);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 0.8rem 0;
+            border: 1px solid rgba(107, 155, 145, 0.1);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: var(--white);
+            padding: 0.6rem 1rem;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(107, 155, 145, 0.05);
+            border: 1px solid rgba(107, 155, 145, 0.1);
+        }
+
+        .detail-label {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+            display: block;
+        }
+
+        .detail-value {
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .apply-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            margin-top: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .apply-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 155, 145, 0.2);
+        }
+
+        .application-form {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-accent);
+            border-radius: 8px;
+            background: var(--background-accent);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(107, 155, 145, 0.2);
+            outline: none;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .application-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(107, 155, 145, 0.1);
+            margin-top: 1.5rem;
+            border: 2px solid rgba(107, 155, 145, 0.1);
+        }
+
+        .admin-button {
+            background-color: var(--background-light);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-right: auto;
+            margin-left: 2rem;
+        }
+
+        .admin-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .nav {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border-accent);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            background-color: var(--background-accent);
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-accent);
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .section {
+            padding: 2rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+            scroll-margin-top: 100px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--text-color);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .info-card {
+            /* Remove background, border, and box-shadow, but keep padding and margin for spacing */
+            background: none !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(51, 51, 51, 0.08);
+        }
+
+        .info-card h3 {
+            color: var(--text-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .info-card p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .job-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .apply-button {
+                position: static;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .logo {
+                max-width: 200px;
+            }
+        }
+
+        .footer {
+            background-color: #fff !important;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        .partners-container {
+            background: none !important;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .partners-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .partners-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .partner-logo {
+            max-width: 250px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-bottom {
+            background-color: #333;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            color: white;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover {
+            color: #007bff;
+        }
+
+        .contact-info {
+            text-align: right;
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-info {
+                text-align: center;
+            }
+        }
+
+        .success-notification {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+        }
+
+        .success-notification.show {
+            display: block;
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #2ecc71;
+            margin: 0 auto 1rem;
+            position: relative;
+            animation: scaleIn 0.5s ease;
+        }
+
+        .checkmark:after {
+            content: '';
+            position: absolute;
+            top: 45%;
+            left: 27%;
+            width: 35%;
+            height: 65%;
+            border: solid white;
+            border-width: 0 4px 4px 0;
+            transform: rotate(45deg) translate(-50%, -50%);
+        }
+
+        .success-notification h3 {
+            color: #2ecc71;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .success-notification p {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .success-notification button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .success-notification button:hover {
+            background-color: #27ae60;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translate(-50%, -60%);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .auth-buttons {
+            position: fixed;
+            top: 1rem;
+            right: 5rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .auth-button {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .auth-modal.show {
+            display: block;
+        }
+
+        .auth-modal h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .auth-form input {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-form button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .auth-switch {
+            margin-top: 1rem;
+            text-align: center;
+            color: var(--light-text);
+        }
+
+        .auth-switch a {
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--light-text);
+        }
+
+        .profile-section {
+            display: none;
+            padding: 2rem;
+        }
+
+        .profile-section.show {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-info {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-applications {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .user-menu {
+            display: none;
+            position: fixed;
+            top: 4rem;
+            right: 5rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .user-menu.show {
+            display: block;
+        }
+
+        .user-menu-item {
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .user-menu-item:hover {
+            background: var(--background-accent);
+        }
+
+        /* Add smooth transitions for all interactive elements */
+        .job-listing, .nav-link, .button, .info-card {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Enhanced hover effects for job listings */
+        .job-listing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(107, 155, 145, 0.15);
+            background: linear-gradient(to right, rgba(107, 155, 145, 0.05), var(--white));
+        }
+
+        /* Pulsing effect for primary buttons */
+        .button.primary {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button.primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .button.primary:active {
+            transform: scale(0.98);
+        }
+
+        /* Nav link hover animation */
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Info card hover effect */
+        .info-card {
+            border: 1px solid var(--border-accent);
+        }
+
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(51, 51, 51, 0.08);
+        }
+
+        /* Section fade-in animation */
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Staggered animation for multiple elements */
+        .job-listing {
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .job-listing:nth-child(1) { animation-delay: 0.1s; }
+        .job-listing:nth-child(2) { animation-delay: 0.2s; }
+        .job-listing:nth-child(3) { animation-delay: 0.3s; }
+        .job-listing:nth-child(4) { animation-delay: 0.4s; }
+        .job-listing:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Header shadow effect */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(51, 51, 51, 0.05);
+        }
+
+        #about, #norway {
+            background: #2c3332;
+            color: var(--white);
+            position: relative;
+            padding-top: 3rem;
+        }
+
+        #about::before {
+            display: none;
+        }
+
+        #about .info-card, #norway .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+        }
+
+        #about .info-card h3, #norway .info-card h3 {
+            color: var(--white);
+        }
+
+        #about .section-title, #norway .section-title {
+            color: var(--white);
+        }
+
+        #about .info-card p, #norway .info-card p,
+        #about .info-card li, #norway .info-card li {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-divider {
+            height: 5px;
+            background: #2c3332;
+            margin: 0;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 40%;
+        }
+
+        .hero-content .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .hero-content .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-content .nav-link:hover, 
+        .hero-content .nav-link.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .admin-panel {
+            background: var(--background-light);
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .admin-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: var(--white);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-tab.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .admin-content {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .job-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .job-form input {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .job-form button {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #profileFilter {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .application-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-button {
+            background-color: var(--background-light);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-right: 20px;
+        }
+
+        .auth-button {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .auth-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .section-divider-custom {
+            width: 100%;
+            height: 32px;
+            background: none;
+            display: block;
+            border: none;
+            margin: 0;
+            position: relative;
+        }
+        .section-divider-custom::after {
+            content: '';
+            display: block;
+            width: 90%;
+            height: 2px;
+            background: #e0e0e0;
+            margin: 0 auto;
+            border-radius: 1px;
+        }
+
+        .info-card, #about .info-card, #norway .info-card {
+            font-size: 1.25rem;
+        }
+        #about .info-card h3, #norway .info-card h3 {
+            font-size: 2rem;
+        }
+        #about .info-card ul, #norway .info-card ul {
+            font-size: 1.15rem;
+        }
+        #about .info-card p, #norway .info-card p {
+            font-size: 1.15rem;
+        }
+
+        .quick-apply-button {
+            background-color: #3e443f;
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .quick-apply-button:hover {
+            background-color: #586055;
+        }
+
+        .profile-icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-icon-button:hover {
+            transform: translateY(-2px);
+            color: var(--secondary-color);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown-item {
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .profile-dropdown-item:hover {
+            background: var(--background-accent);
+        }
+
+        .profile-dropdown-item i {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .profile-icon-container {
+            position: relative;
+        }
+
+        .notification-icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .notification-icon-button:hover {
+            transform: translateY(-2px);
+            color: var(--secondary-color);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .register-notification {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .register-notification.show {
+            display: block;
+        }
+
+        .register-notification h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .register-notification p {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .register-notification .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .register-notification button {
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .register-notification .register-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .register-notification .register-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .register-notification .cancel-button {
+            background-color: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .register-notification .cancel-button:hover {
+            background-color: var(--background-light);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--white);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(107, 155, 145, 0.2);
+            outline: none;
+        }
+
+        .notification-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .notification-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent rgba(0, 0, 0, 0.8) transparent;
+        }
+
+        .notification-icon-button:hover .notification-tooltip {
+            opacity: 1;
+        }
+
+        /* Lägg till efter befintlig CSS */
+        .availability-weeks {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--background-light);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .week-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--white);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .week-label:hover {
+            background: var(--background-accent);
+        }
+
+        .week-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+
+        .availability-slider {
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+        }
+
+        .slider-track {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+
+        .slider-range {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        input[type="range"] {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            -webkit-appearance: none;
+            pointer-events: none;
+            background: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 2px solid var(--white);
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 2px solid var(--white);
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider-values {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="index.html" onclick="window.location.href='index.html'; return false;" style="text-decoration: none; height: 100%; display: flex; align-items: center;">
+                <img src="Vårdbasen ny.png" alt="Vårdbasen.se" class="logo">
+            </a>
+        </div>
+        <div class="header-buttons">
+            <button class="header-button" onclick="showAuthModal('register')">Registrera</button>
+            <button class="header-button" onclick="showAuthModal('login')">Logga in</button>
+            <a href="admin.html" class="header-button">Admin</a>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Hitta ditt nästa vårdjobb</h1>
+            <div class="nav-container">
+                <a href="#jobs" class="nav-link active" onclick="showSection('jobs', this)">Lediga jobb</a>
+                <a href="#about" class="nav-link" onclick="showSection('about', this)">Om oss</a>
+                <a href="#norway" class="nav-link" onclick="showSection('norway', this)">Jobb i Norge</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="NorsFjord1.png" 
+                 alt="Panoramabild av norsk fjord med dramatiska klippor och blått vatten">
+        </div>
+    </div>
+
+    <div id="jobs" class="section active">
+        <div class="container">
+            <div class="job-listing">
+                <h2 class="job-title">🏔️ Sjuksköterska i Tromsø</h2>
+                <div class="job-company">Universitetssykehuset Nord-Norge</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Tromsø kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">550 000 - 650 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, treskift</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Akutmottagning</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">⛰️ Sjuksköterska i Bergen</h2>
+                <div class="job-company">Haukeland universitetssjukehus</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Bergen kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">520 000 - 620 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, dagpass</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Kirurgisk avdelning</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🌊 Sjuksköterska i Stavanger</h2>
+                <div class="job-company">Stavanger universitetssjukehus</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Stavanger kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">530 000 - 630 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, rotation</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Intensivvård</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🎣 Sjuksköterska i Bodø</h2>
+                <div class="job-company">Nordlandssykehuset</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Bodø kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">540 000 - 640 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, tvåskift</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Medicinavdelning</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🌲 Sjuksköterska i Trondheim</h2>
+                <div class="job-company">St. Olavs Hospital</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Trondheim kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">525 000 - 625 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, rotation</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Barnsjukvård</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🏰 Sjuksköterska i Ålesund</h2>
+                <div class="job-company">Ålesund sjukehus</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Ålesund kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">515 000 - 615 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, dagpass</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Geriatrik</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🌅 Sjuksköterska i Kristiansand</h2>
+                <div class="job-company">Sørlandet Sykehus</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Kristiansand kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">510 000 - 610 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, treskift</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Akutpsykiatri</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="job-listing">
+                <h2 class="job-title">🗻 Sjuksköterska i Drammen</h2>
+                <div class="job-company">Drammen Sykehus</div>
+                <div class="job-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Plats:</span>
+                        <span class="detail-value">Drammen kommun, Norge</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Lön:</span>
+                        <span class="detail-value">505 000 - 605 000 NOK/år</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Arbetstid:</span>
+                        <span class="detail-value">Heltid, tvåskift</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Avdelning:</span>
+                        <span class="detail-value">Rehabilitering</span>
+                    </div>
+                </div>
+                <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                <div class="application-form">
+                    <form onsubmit="submitApplication(event, this)">
+                        <div class="form-group">
+                            <label for="name">Namn:</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-post:</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefon:</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester">Termin:</label>
+                            <select id="semester" required>
+                                <option value="">Välj termin</option>
+                                <option value="1">Termin 1</option>
+                                <option value="2">Termin 2</option>
+                                <option value="3">Termin 3</option>
+                                <option value="4">Termin 4</option>
+                                <option value="5">Termin 5</option>
+                                <option value="6">Termin 6</option>
+                                <option value="7">Termin 7</option>
+                                <option value="8">Termin 8</option>
+                                <option value="9">Termin 9</option>
+                                <option value="10">Termin 10</option>
+                                <option value="11">Termin 11</option>
+                                <option value="12">Termin 12</option>
+                                <option value="graduated">Utexaminerad</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="availability">Tillgänglighetsveckor:</label>
+                            <div class="availability-slider">
+                                <div class="slider-container">
+                                    <div class="slider-track"></div>
+                                    <input type="range" class="range-start" min="1" max="52" value="1">
+                                    <input type="range" class="range-end" min="1" max="52" value="52">
+                                    <div class="slider-range"></div>
+                                </div>
+                                <div class="slider-values">
+                                    <span class="start-value">Vecka 1</span>
+                                    <span class="end-value">Vecka 52</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Meddelande:</label>
+                            <textarea id="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Skicka ansökan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about" class="section">
+        <div class="about-content">
+            <h2 class="section-title">Om oss</h2>
+            <div class="info-card">
+                <h3>Vårt uppdrag</h3>
+                <p>Vårdbasen är en ledande plattform för att koppla samman kvalificerad vårdpersonal med attraktiva jobbmöjligheter i Sverige och Norge. Vi strävar efter att förenkla rekryteringsprocessen och skapa bättre möjligheter inom vårdsektorn.</p>
+            </div>
+            <div class="info-card">
+                <h3>Vad vi erbjuder</h3>
+                <ul>
+                    <li>Personlig matchning mellan kandidater och arbetsgivare</li>
+                    <li>Omfattande stöd genom hela ansökningsprocessen</li>
+                    <li>Expertis inom både svensk och norsk vårdsektor</li>
+                    <li>Konkurrenskraftiga löner och förmåner</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider-custom"></div>
+
+    <div id="norway" class="section">
+        <div class="norway-content">
+            <h2 class="section-title">Jobb i Norge</h2>
+            <div class="info-card">
+                <h3>Varför välja Norge?</h3>
+                <p>Norge erbjuder exceptionella möjligheter för vårdpersonal med attraktiva arbetsvillkor, högre löner och en enastående livskvalitet. Med vacker natur och en stark välfärdsstat är Norge ett utmärkt val för din karriär inom vården.</p>
+            </div>
+            <div class="info-card">
+                <h3>Fördelar med att jobba i Norge</h3>
+                <ul>
+                    <li>Högre lönenivåer än i Sverige</li>
+                    <li>Bra balans mellan arbete och fritid</li>
+                    <li>Moderna arbetsplatser och avancerad utrustning</li>
+                    <li>Möjlighet att uppleva Norges fantastiska natur</li>
+                    <li>Omfattande stöd för utländsk vårdpersonal</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="partners-container">
+            <h2 class="partners-title">Våra samarbetspartners:</h2>
+            <div class="partners-grid">
+                <img src="Beijarn.png" alt="Beiarn Kommune" class="partner-logo">
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-content">
+                <div class="social-icons">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+                <div class="contact-info">
+                    <p>📞 +46 (0)8 123 456 789</p>
+                    <p>✉️ info@vardbasen.se</p>
+                    <p>📍 Drottninggatan 100, 111 60 Stockholm</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="register-notification" id="registerPrompt">
+        <h3>Registrera dig på under 1 minut</h3>
+        <p>För att snabbsöka behöver du registrera dig. Det tar bara en minut och ger dig tillgång till:</p>
+        <ul style="text-align: left; margin: 1rem 0; list-style-type: none;">
+            <li style="margin: 0.5rem 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 0.5rem;"></i>Snabbsök på alla jobb</li>
+            <li style="margin: 0.5rem 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 0.5rem;"></i>Spara dina ansökningar</li>
+            <li style="margin: 0.5rem 0;"><i class="fas fa-check" style="color: var(--primary-color); margin-right: 0.5rem;"></i>Se status på dina ansökningar</li>
+        </ul>
+        <div class="buttons">
+            <button class="register-button" onclick="showAuthModal('register')">Registrera dig nu</button>
+            <button class="cancel-button" onclick="hideRegisterPrompt()">Avbryt</button>
+        </div>
+    </div>
+
+    <div class="success-notification" id="successNotification">
+        <div class="checkmark"></div>
+        <h3>Ansökan skickad!</h3>
+        <p>Din ansökan har registrerats. Vi återkommer så snart som möjligt.</p>
+        <button onclick="closeSuccessNotification()">OK</button>
+    </div>
+
+    <div class="user-menu" id="userMenu">
+        <div class="user-menu-item" onclick="showSection('profile', this)">Min profil</div>
+        <div class="user-menu-item" onclick="logout()">Logga ut</div>
+    </div>
+
+    <!-- Auth Modals -->
+    <div class="auth-modal" id="loginModal">
+        <button class="close-button" onclick="closeAuthModal()">&times;</button>
+        <h2>Logga in</h2>
+        <form class="auth-form" onsubmit="login(event)">
+            <input type="email" placeholder="E-post" required>
+            <input type="password" placeholder="Lösenord" required>
+            <button type="submit">Logga in</button>
+        </form>
+        <div class="auth-switch">
+            Har du inget konto? <a onclick="showAuthModal('register')">Registrera dig</a>
+        </div>
+    </div>
+
+    <div class="auth-modal" id="registerModal">
+        <button class="close-button" onclick="closeAuthModal()">&times;</button>
+        <h2>Registrera dig</h2>
+        <form class="auth-form" onsubmit="register(event)">
+            <input type="text" name="name" placeholder="Namn" required>
+            <input type="email" name="email" placeholder="E-post" required>
+            <select name="semester" required style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 5px;">
+                <option value="">Välj termin</option>
+                <option value="1">Termin 1</option>
+                <option value="2">Termin 2</option>
+                <option value="3">Termin 3</option>
+                <option value="4">Termin 4</option>
+                <option value="5">Termin 5</option>
+                <option value="6">Termin 6</option>
+                <option value="7">Termin 7</option>
+                <option value="8">Termin 8</option>
+                <option value="9">Termin 9</option>
+                <option value="10">Termin 10</option>
+                <option value="11">Termin 11</option>
+                <option value="12">Termin 12</option>
+                <option value="graduated">Utexaminerad</option>
+            </select>
+            <input type="password" name="password" placeholder="Lösenord" required>
+            <input type="password" name="confirmPassword" placeholder="Bekräfta lösenord" required>
+            <button type="submit">Registrera</button>
+        </form>
+        <div class="auth-switch">
+            Har du redan ett konto? <a onclick="showAuthModal('login')">Logga in</a>
+        </div>
+    </div>
+
+    <!-- Add Font Awesome for social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <div class="admin-panel" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Admin Panel</h2>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="showAdminTab('applications')">Ansökningar</button>
+                <button class="admin-tab" onclick="showAdminTab('jobs')">Jobb</button>
+                <button class="admin-tab" onclick="showAdminTab('users')">Användare</button>
+                <button class="admin-tab" onclick="showAdminTab('profiles')">Profiler</button>
+            </div>
+
+            <div id="applications-tab" class="admin-content active">
+                <h3>Ansökningar</h3>
+                <div id="applicationsList"></div>
+            </div>
+
+            <div id="jobs-tab" class="admin-content">
+                <h3>Hantera jobb</h3>
+                <form onsubmit="createNewJob(event)" class="job-form">
+                    <input type="text" id="jobTitle" placeholder="Jobbtitel" required>
+                    <input type="text" id="company" placeholder="Företag" required>
+                    <input type="text" id="location" placeholder="Plats" required>
+                    <input type="text" id="salary" placeholder="Lön" required>
+                    <input type="text" id="workHours" placeholder="Arbetstid" required>
+                    <input type="text" id="profession" placeholder="Yrke" required>
+                    <button type="submit">Lägg till jobb</button>
+                </form>
+                <div id="jobsList"></div>
+            </div>
+
+            <div id="users-tab" class="admin-content">
+                <h3>Användare</h3>
+                <div id="usersList"></div>
+            </div>
+
+            <div id="profiles-tab" class="admin-content">
+                <h3>Profiler</h3>
+                <select id="profileFilter" onchange="filterProfiles()">
+                    <option value="all">Alla profiler</option>
+                    <option value="complete">Kompletta profiler</option>
+                    <option value="incomplete">Inkompletta profiler</option>
+                </select>
+                <div id="profilesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .admin-panel {
+            background: var(--background-light);
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .admin-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: var(--white);
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .admin-tab.active {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .admin-content {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .job-form {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .job-form input {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .job-form button {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #profileFilter {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+
+        .application-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+    </style>
+
+    <script>
+        // Ta bort localStorage.clear();
+        // Lägg bara till initiala jobb om det inte redan finns jobb
+        if (!localStorage.getItem('applications')) {
+            localStorage.setItem('applications', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('healthcareProviders')) {
+            localStorage.setItem('healthcareProviders', JSON.stringify([
+                {
+                    id: 1,
+                    name: "Karolinska Universitetssjukhuset",
+                    email: "karolinska@example.com"
+                },
+                {
+                    id: 2,
+                    name: "Sahlgrenska Universitetssjukhuset",
+                    email: "sahlgrenska@example.com"
+                },
+                {
+                    id: 3,
+                    name: "Skånes Universitetssjukhus",
+                    email: "skane@example.com"
+                }
+            ]));
+        }
+        if (!localStorage.getItem('jobs')) {
+            localStorage.setItem('jobs', JSON.stringify([
+                {
+                    id: 1,
+                    title: "Specialistsjuksköterska Intensivvård",
+                    company: "Universitetssjukhuset i Linköping",
+                    location: "Linköping, Sverige",
+                    salary: "42 000 - 48 000 kr/månad",
+                    workHours: "Heltid, Treskift",
+                    profession: "Specialistsjuksköterska"
+                },
+                {
+                    id: 2,
+                    title: "Barnsjuksköterska",
+                    company: "Akademiska Barnsjukhuset",
+                    location: "Uppsala, Sverige",
+                    salary: "38 000 - 44 000 kr/månad",
+                    workHours: "Heltid, Dagtid",
+                    profession: "Barnsjuksköterska"
+                },
+                {
+                    id: 3,
+                    title: "Operationssjuksköterska",
+                    company: "Norrlands Universitetssjukhus",
+                    location: "Umeå, Sverige",
+                    salary: "40 000 - 46 000 kr/månad",
+                    workHours: "Heltid, Tvåskift",
+                    profession: "Operationssjuksköterska"
+                },
+                {
+                    id: 4,
+                    title: "Distriktssköterska",
+                    company: "Vårdcentralen Centrum",
+                    location: "Västerås, Sverige",
+                    salary: "36 000 - 42 000 kr/månad",
+                    workHours: "Heltid, Dagtid",
+                    profession: "Distriktssköterska"
+                },
+                {
+                    id: 5,
+                    title: "Akutsjuksköterska",
+                    company: "Södersjukhuset",
+                    location: "Stockholm, Sverige",
+                    salary: "39 000 - 45 000 kr/månad",
+                    workHours: "Heltid, Rotation",
+                    profession: "Akutsjuksköterska"
+                }
+            ]));
+        }
+        
+        function showApplicationForm(button) {
+            const applicationForm = button.parentElement.querySelector('.application-form');
+            if (applicationForm) {
+                applicationForm.style.display = applicationForm.style.display === 'none' || applicationForm.style.display === '' ? 'block' : 'none';
+            }
+        }
+
+        function submitApplication(event, form) {
+            event.preventDefault();
+            
+            const rangeStart = form.querySelector('.range-start');
+            const rangeEnd = form.querySelector('.range-end');
+            
+            const application = {
+                id: Date.now().toString(),
+                name: form.querySelector('#name').value,
+                email: form.querySelector('#email').value,
+                phone: form.querySelector('#phone').value,
+                semester: form.querySelector('#semester').value,
+                availabilityStart: rangeStart.value,
+                availabilityEnd: rangeEnd.value,
+                message: form.querySelector('#message').value,
+                jobTitle: form.closest('.job-listing').querySelector('.job-title').textContent,
+                company: form.closest('.job-listing').querySelector('.job-company').textContent,
+                location: form.closest('.job-listing').querySelector('.detail-value').textContent,
+                date: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            // Hämta befintliga ansökningar eller skapa ny array
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            applications.push(application);
+            localStorage.setItem('applications', JSON.stringify(applications));
+
+            // Visa bekräftelse
+            form.closest('.application-form').style.display = 'none';
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('successNotification').classList.add('show');
+        }
+
+        function closeNotification() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('successNotification').classList.remove('show');
+        }
+
+        function toggleAdminPanel() {
+            const adminPanel = document.querySelector('.admin-panel');
+            const sections = document.querySelectorAll('.section');
+            
+            if (adminPanel.style.display === 'none') {
+                // Dölj alla andra sektioner
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Visa admin-panelen
+                adminPanel.style.display = 'block';
+                
+                // Uppdatera listorna
+                updateApplicationsList();
+                updateJobsList();
+                updateUsersList();
+                updateProfilesList();
+            } else {
+                // Dölj admin-panelen
+                adminPanel.style.display = 'none';
+                
+                // Visa jobsektionen
+                document.getElementById('jobs').style.display = 'block';
+            }
+        }
+
+        function updateApplicationsList() {
+            const applications = JSON.parse(localStorage.getItem('applications'));
+            const listElement = document.getElementById('applicationsList');
+            
+            listElement.innerHTML = applications.map(app => `
+                <div class="application-item">
+                    <h3>${app.name} - ${app.jobTitle}</h3>
+                    <p><strong>Plats:</strong> ${app.location}</p>
+                    <p><strong>E-post:</strong> ${app.email}</p>
+                    <p><strong>Telefon:</strong> ${app.phone}</p>
+                    <p><strong>Meddelande:</strong> ${app.message}</p>
+                    <p><strong>Datum:</strong> ${new Date(app.timestamp).toLocaleString()}</p>
+                    <p><strong>Status:</strong> ${app.status}</p>
+                    <button onclick="updateApplicationStatus(${app.id}, 'accepted')">Acceptera</button>
+                    <button onclick="updateApplicationStatus(${app.id}, 'rejected')">Avvisa</button>
+                </div>
+            `).join('');
+        }
+
+        function updateApplicationStatus(id, status) {
+            const applications = JSON.parse(localStorage.getItem('applications'));
+            const application = applications.find(app => app.id === id);
+            
+            if (application) {
+                application.status = status;
+                localStorage.setItem('applications', JSON.stringify(applications));
+                updateApplicationsList();
+                
+                // Simulerad e-post skickad till ${application.email}:
+                // Din ansökan har ${status === 'accepted' ? 'accepterats' : 'avvisats'}
+            }
+        }
+
+        // Initialize admin panel as hidden
+        document.querySelector('.admin-panel').style.display = 'none';
+
+        function showSection(sectionId, linkElement) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            linkElement.classList.add('active');
+        }
+
+        function showAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const selectedTab = document.querySelector(`.admin-tab[onclick*="${tabName}"]`);
+            const selectedContent = document.getElementById(`${tabName}-tab`);
+            
+            selectedTab.classList.add('active');
+            selectedContent.classList.add('active');
+
+            if (tabName === 'jobs') {
+                updateJobsList();
+            } else if (tabName === 'users') {
+                updateUsersList();
+            } else if (tabName === 'profiles') {
+                updateProfilesList();
+            }
+        }
+
+        function createNewJob(event) {
+            event.preventDefault();
+            
+            const newJob = {
+                id: Date.now(),
+                title: document.getElementById('jobTitle').value,
+                company: document.getElementById('company').value,
+                location: document.getElementById('location').value,
+                salary: document.getElementById('salary').value,
+                workHours: document.getElementById('workHours').value,
+                profession: document.getElementById('profession').value
+            };
+
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            jobs.push(newJob);
+            localStorage.setItem('jobs', JSON.stringify(jobs));
+
+            event.target.reset();
+            updateJobsList();
+            updateJobListings();
+        }
+
+        function deleteJob(jobId) {
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            const updatedJobs = jobs.filter(job => job.id !== jobId);
+            localStorage.setItem('jobs', JSON.stringify(updatedJobs));
+            updateJobsList();
+            updateJobListings();
+        }
+
+        function updateJobsList() {
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            const jobsList = document.getElementById('jobsList');
+            
+            jobsList.innerHTML = jobs.map(job => `
+                <div class="info-card">
+                    <h3>${job.title} - ${job.company}</h3>
+                    <p><strong>Plats:</strong> ${job.location}</p>
+                    <p><strong>Lön:</strong> ${job.salary}</p>
+                    <p><strong>Arbetstid:</strong> ${job.workHours}</p>
+                    <button onclick="deleteJob(${job.id})" style="background-color: #e74c3c; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px; cursor: pointer; margin-top: 1rem;">Ta bort</button>
+                </div>
+            `).join('');
+        }
+
+        function updateJobListings() {
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            const container = document.querySelector('#jobs .container');
+            
+            container.innerHTML = jobs.map(job => `
+                <div class="job-listing">
+                    <h2 class="job-title">${job.title}</h2>
+                    <div class="job-company">${job.company}</div>
+                    <div class="job-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Plats:</span>
+                            <span class="detail-value">${job.location}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Lön:</span>
+                            <span class="detail-value">${job.salary}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Arbetstid:</span>
+                            <span class="detail-value">${job.workHours}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Yrke:</span>
+                            <span class="detail-value">${job.profession}</span>
+                        </div>
+                    </div>
+                    <button class="apply-button" onclick="showApplicationForm(this)">Ansök nu</button>
+                    <button class="quick-apply-button" onclick="quickApply()">Snabbsök</button>
+                    <div class="application-form">
+                        <form onsubmit="submitApplication(event, this)">
+                            <div class="form-group">
+                                <label for="name">Namn:</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-post:</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Telefon:</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="semester">Termin:</label>
+                                <select id="semester" required>
+                                    <option value="">Välj termin</option>
+                                    <option value="1">Termin 1</option>
+                                    <option value="2">Termin 2</option>
+                                    <option value="3">Termin 3</option>
+                                    <option value="4">Termin 4</option>
+                                    <option value="5">Termin 5</option>
+                                    <option value="6">Termin 6</option>
+                                    <option value="7">Termin 7</option>
+                                    <option value="8">Termin 8</option>
+                                    <option value="9">Termin 9</option>
+                                    <option value="10">Termin 10</option>
+                                    <option value="11">Termin 11</option>
+                                    <option value="12">Termin 12</option>
+                                    <option value="graduated">Utexaminerad</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="availability">Tillgänglighetsveckor:</label>
+                                <div class="availability-slider">
+                                    <div class="slider-container">
+                                        <div class="slider-track"></div>
+                                        <input type="range" class="range-start" min="1" max="52" value="1">
+                                        <input type="range" class="range-end" min="1" max="52" value="52">
+                                        <div class="slider-range"></div>
+                                    </div>
+                                    <div class="slider-values">
+                                        <span class="start-value">Vecka 1</span>
+                                        <span class="end-value">Vecka 52</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Meddelande:</label>
+                                <textarea id="message" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-button">Skicka ansökan</button>
+                        </form>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize the page
+        updateJobListings();
+
+        // Initialize users in localStorage if not exists
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([]));
+        }
+
+        function showAuthModal(type) {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('loginModal').classList.remove('show');
+            document.getElementById('registerModal').classList.remove('show');
+            document.getElementById(`${type}Modal`).classList.add('show');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('loginModal').classList.remove('show');
+            document.getElementById('registerModal').classList.remove('show');
+        }
+
+        function register(event) {
+            event.preventDefault();
+            const form = event.target;
+            const name = form.querySelector('input[name="name"]').value;
+            const email = form.querySelector('input[name="email"]').value;
+            const semester = form.querySelector('select[name="semester"]').value;
+            const password = form.querySelector('input[name="password"]').value;
+            const confirmPassword = form.querySelector('input[name="confirmPassword"]').value;
+
+            if (password !== confirmPassword) {
+                alert('Lösenorden matchar inte');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(user => user.email === email)) {
+                alert('En användare med denna e-postadress finns redan');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                semester,
+                password,
+                role: 'user',
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+
+            closeAuthModal();
+            updateAuthUI();
+            alert('Registrering lyckades!');
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const form = event.target;
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                closeAuthModal();
+                updateAuthUI();
+                alert('Inloggning lyckades!');
+            } else {
+                alert('Fel e-postadress eller lösenord');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            updateAuthUI();
+        }
+
+        function updateAuthUI() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const headerButtons = document.querySelector('.header-buttons');
+
+            if (currentUser) {
+                const notificationCount = getNotificationCount();
+                headerButtons.innerHTML = `
+                    <div class="header-icons">
+                        <button class="notification-icon-button" title="Notifikationer">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">0</span>
+                            <span class="notification-tooltip">${notificationCount} olästa notifikationer</span>
+                        </button>
+                        <div class="profile-icon-container">
+                            <button class="profile-icon-button" onclick="toggleProfileDropdown()" title="Min profil">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div class="profile-dropdown" id="profileDropdown">
+                                <a href="jobs.html" class="profile-dropdown-item" onclick="document.getElementById('profileDropdown').classList.remove('show')">
+                                    <i class="fas fa-briefcase"></i>
+                                    Mina jobb
+                                </a>
+                                <a href="profile.html" class="profile-dropdown-item" onclick="document.getElementById('profileDropdown').classList.remove('show')">
+                                    <i class="fas fa-user-cog"></i>
+                                    Profiluppgifter
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="header-button" onclick="logout()">Logga ut</button>
+                    ${currentUser.role === 'admin' ? '<a href="admin.html" class="header-button">Admin</a>' : ''}
+                `;
+            } else {
+                headerButtons.innerHTML = `
+                    <button class="header-button" onclick="showAuthModal('register')">Registrera</button>
+                    <button class="header-button" onclick="showAuthModal('login')">Logga in</button>
+                    <a href="admin.html" class="header-button">Admin</a>
+                `;
+            }
+        }
+
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('show');
+        }
+
+        function updateProfileData() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+
+            const profileData = document.getElementById('profileData');
+            const userProfile = currentUser.profile || {};
+            
+            profileData.innerHTML = `
+                <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">Personlig information</h3>
+                <div class="profile-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div class="profile-info-group">
+                        <p><strong>Namn:</strong> ${currentUser.name}</p>
+                        <p><strong>E-post:</strong> ${currentUser.email}</p>
+                        <p><strong>Telefon:</strong> ${userProfile.phone || 'Ej angivet'}</p>
+                        <p><strong>Adress:</strong> ${userProfile.address || 'Ej angivet'}</p>
+                    </div>
+                    <div class="profile-info-group">
+                        <p><strong>Utbildning:</strong> ${userProfile.education || 'Ej angivet'}</p>
+                        <p><strong>Specialisering:</strong> ${userProfile.specialization || 'Ej angivet'}</p>
+                        <p><strong>Legitimation:</strong> ${userProfile.license || 'Ej angivet'}</p>
+                    </div>
+                </div>
+                <button class="header-button" onclick="editUserProfile()" style="margin-top: 2rem;">Redigera profil</button>
+            `;
+
+            const applications = JSON.parse(localStorage.getItem('applications'))
+                .filter(app => app.email === currentUser.email);
+            
+            const userApplications = document.getElementById('userApplications');
+            userApplications.innerHTML = applications.length ? applications.map(app => `
+                <div class="info-card" style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--text-color); margin-bottom: 1rem;">${app.jobTitle}</h3>
+                    <p><strong>Plats:</strong> ${app.location}</p>
+                    <p><strong>Status:</strong> <span style="color: ${app.status === 'pending' ? '#f1c40f' : app.status === 'accepted' ? '#2ecc71' : '#e74c3c'}">${
+                        app.status === 'pending' ? 'Under behandling' : 
+                        app.status === 'accepted' ? 'Accepterad' : 'Avvisad'
+                    }</span></p>
+                    <p><strong>Ansökningsdatum:</strong> ${new Date(app.timestamp).toLocaleDateString()}</p>
+                </div>
+            `).join('') : '<p style="text-align: center; color: var(--light-text);">Du har inga aktiva ansökningar.</p>';
+        }
+
+        function editUserProfile() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userProfile = currentUser.profile || {};
+
+            const modalHtml = `
+                <div class="auth-modal show" id="profileEditModal" style="z-index: 1001;">
+                    <button class="close-button" onclick="closeProfileEdit()">&times;</button>
+                    <h2>Redigera profil</h2>
+                    <form class="auth-form" onsubmit="saveUserProfile(event)">
+                        <input type="tel" name="phone" placeholder="Telefon" value="${userProfile.phone || ''}" required>
+                        <input type="text" name="address" placeholder="Adress" value="${userProfile.address || ''}" required>
+                        <input type="text" name="education" placeholder="Utbildning" value="${userProfile.education || ''}" required>
+                        <input type="text" name="specialization" placeholder="Specialisering" value="${userProfile.specialization || ''}" required>
+                        <input type="text" name="license" placeholder="Legitimationsnummer" value="${userProfile.license || ''}" required>
+                        <button type="submit" class="header-button" style="width: 100%; margin-top: 1rem;">Spara profil</button>
+                    </form>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeProfileEdit() {
+            const modal = document.getElementById('profileEditModal');
+            if (modal) {
+                modal.remove();
+                document.getElementById('overlay').classList.remove('show');
+            }
+        }
+
+        function saveUserProfile(event) {
+            event.preventDefault();
+            const form = event.target;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            currentUser.profile = {
+                phone: form.phone.value,
+                address: form.address.value,
+                education: form.education.value,
+                specialization: form.specialization.value,
+                license: form.license.value
+            };
+
+            // Uppdatera både currentUser och users array
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+
+            closeProfileEdit();
+            updateProfileData();
+        }
+
+        function showProfileSection(section = 'profile') {
+            // Dölj alla sektioner
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            // Stäng dropdown
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdown) {
+                dropdown.classList.remove('show');
+            }
+            
+            // Skapa eller uppdatera profilsektionen
+            let profileSection = document.getElementById('profile');
+            if (!profileSection) {
+                profileSection = document.createElement('div');
+                profileSection.id = 'profile';
+                profileSection.className = 'section';
+                document.body.appendChild(profileSection);
+            }
+
+            if (section === 'jobs') {
+                profileSection.innerHTML = `
+                    <div class="container">
+                        <h2 class="section-title">Mina jobb</h2>
+                        <div id="userApplications">
+                            <!-- Ansökningar kommer att fyllas i här -->
+                        </div>
+                    </div>
+                `;
+            } else {
+                profileSection.innerHTML = `
+                    <div class="container">
+                        <h2 class="section-title">Profiluppgifter</h2>
+                        <div class="info-card">
+                            <div id="profileData">
+                                <!-- Profildata kommer att fyllas i här -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Visa sektionen och uppdatera data
+            profileSection.classList.add('active');
+            if (section === 'jobs') {
+                updateProfileData(); // Detta uppdaterar redan jobblistan
+            } else {
+                updateProfileData();
+            }
+        }
+
+        // Initialize UI
+        updateAuthUI();
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const authButtons = document.getElementById('authButtons');
+            if (!userMenu.contains(event.target) && !authButtons.contains(event.target)) {
+                userMenu.classList.remove('show');
+            }
+        });
+
+        function updateUsersList() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const usersList = document.getElementById('usersList');
+            
+            usersList.innerHTML = users.map(user => {
+                const userApplications = JSON.parse(localStorage.getItem('applications'))
+                    .filter(app => app.email === user.email);
+                
+                return `
+                    <div class="info-card">
+                        <h3>${user.name}</h3>
+                        <p><strong>E-post:</strong> ${user.email}</p>
+                        <p><strong>Antal ansökningar:</strong> ${userApplications.length}</p>
+                        <div class="user-applications">
+                            <h4>Användarens ansökningar:</h4>
+                            ${userApplications.map(app => `
+                                <div class="application-item" style="margin: 10px 0; padding: 10px; border-left: 3px solid var(--primary-color);">
+                                    <p><strong>Jobb:</strong> ${app.jobTitle}</p>
+                                    <p><strong>Status:</strong> ${app.status}</p>
+                                    <p><strong>Datum:</strong> ${new Date(app.timestamp).toLocaleDateString()}</p>
+                                </div>
+                            `).join('') || '<p>Inga ansökningar än.</p>'}
+                        </div>
+                        <button onclick="deleteUser(${user.id})" 
+                                style="background-color: #e74c3c; color: white; padding: 0.5rem 1rem; border: none; 
+                                border-radius: 5px; cursor: pointer; margin-top: 1rem;">
+                            Ta bort användare
+                        </button>
+                    </div>
+                `;
+            }).join('') || '<p>Inga registrerade användare.</p>';
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('Är du säker på att du vill ta bort denna användare? Detta kommer även ta bort alla användarens ansökningar.')) {
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userToDelete = users.find(user => user.id === userId);
+            
+            if (userToDelete) {
+                // Ta bort användaren
+                const updatedUsers = users.filter(user => user.id !== userId);
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+                // Ta bort användarens ansökningar
+                const applications = JSON.parse(localStorage.getItem('applications'));
+                const updatedApplications = applications.filter(app => app.email !== userToDelete.email);
+                localStorage.setItem('applications', JSON.stringify(updatedApplications));
+
+                // Uppdatera gränssnittet
+                updateUsersList();
+                updateApplicationsList();
+            }
+        }
+
+        function updateProfilesList(filter = 'all') {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const profilesList = document.getElementById('profilesList');
+            
+            const filteredUsers = users.filter(user => {
+                if (filter === 'all') return true;
+                const hasCompleteProfile = checkProfileCompleteness(user);
+                return filter === 'complete' ? hasCompleteProfile : !hasCompleteProfile;
+            });
+
+            profilesList.innerHTML = filteredUsers.map(user => {
+                const profile = user.profile || {};
+                const completeness = calculateProfileCompleteness(user);
+                
+                return `
+                    <div class="info-card" style="
+                        background: white;
+                        border: 1px solid var(--border-color);
+                        border-radius: 10px;
+                        padding: 2rem;
+                        margin-bottom: 2rem;
+                        box-shadow: var(--shadow);
+                    ">
+                        <div class="profile-header" style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: 1.5rem;
+                            padding-bottom: 1rem;
+                            border-bottom: 1px solid var(--border-color);
+                        ">
+                            <h3 style="
+                                font-size: 1.5rem;
+                                color: var(--primary-color);
+                                margin: 0;
+                            ">${user.name}</h3>
+                            <span class="profile-status" style="
+                                padding: 8px 16px;
+                                border-radius: 20px;
+                                background-color: ${completeness === 100 ? '#2ecc71' : '#f1c40f'};
+                                color: white;
+                                font-size: 0.9rem;
+                                font-weight: 500;
+                            ">
+                                ${completeness}% komplett
+                            </span>
+                        </div>
+                        
+                        <div class="profile-grid" style="
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                            gap: 1.5rem;
+                            margin-bottom: 1.5rem;
+                        ">
+                            <div class="profile-info-group">
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">E-post:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${user.email}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Telefon:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.phone || 'Ej angivet'}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Adress:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.address || 'Ej angivet'}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Stad:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.city || 'Ej angivet'}</span>
+                                </p>
+                            </div>
+                            <div class="profile-info-group">
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Utbildning:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.education || 'Ej angivet'}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Erfarenhet:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.experience || 'Ej angivet'}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Specialisering:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.specialization || 'Ej angivet'}</span>
+                                </p>
+                                <p style="margin-bottom: 1rem;">
+                                    <strong style="color: var(--primary-color);">Legitimation:</strong>
+                                    <span style="display: block; margin-top: 0.3rem;">${profile.license || 'Ej angivet'}</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions" style="
+                            display: flex;
+                            gap: 1rem;
+                            margin-top: 1.5rem;
+                            padding-top: 1.5rem;
+                            border-top: 1px solid var(--border-color);
+                        ">
+                            <button onclick="editProfile(${user.id})" style="
+                                background-color: var(--primary-color);
+                                color: white;
+                                padding: 0.8rem 1.5rem;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-weight: 500;
+                                transition: background-color 0.3s ease;
+                            ">
+                                Redigera profil
+                            </button>
+                            <button onclick="deleteProfile(${user.id})" style="
+                                background-color: #e74c3c;
+                                color: white;
+                                padding: 0.8rem 1.5rem;
+                                border: none;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                font-weight: 500;
+                                transition: background-color 0.3s ease;
+                            ">
+                                Ta bort profil
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="text-align: center; color: var(--light-text);">Inga profiler hittades.</p>';
+        }
+
+        function calculateProfileCompleteness(user) {
+            const profile = user.profile || {};
+            const requiredFields = ['phone', 'address', 'city', 'education', 'experience', 'specialization', 'license'];
+            const completedFields = requiredFields.filter(field => profile[field] && profile[field].trim() !== '');
+            return Math.round((completedFields.length / requiredFields.length) * 100);
+        }
+
+        function checkProfileCompleteness(user) {
+            return calculateProfileCompleteness(user) === 100;
+        }
+
+        function filterProfiles() {
+            const filter = document.getElementById('profileFilter').value;
+            updateProfilesList(filter);
+        }
+
+        function editProfile(userId) {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.id === userId);
+            const profile = user.profile || {};
+
+            // Skapa modal för profilredigering
+            const modalHtml = `
+                <div class="auth-modal show" id="profileEditModal" style="z-index: 1001;">
+                    <h2>Redigera profil - ${user.name}</h2>
+                    <form class="auth-form" onsubmit="saveProfile(event, ${userId})">
+                        <input type="tel" name="phone" placeholder="Telefon" value="${profile.phone || ''}" required>
+                        <input type="text" name="address" placeholder="Adress" value="${profile.address || ''}" required>
+                        <input type="text" name="city" placeholder="Stad" value="${profile.city || ''}" required>
+                        <input type="text" name="education" placeholder="Utbildning" value="${profile.education || ''}" required>
+                        <textarea name="experience" placeholder="Erfarenhet" required>${profile.experience || ''}</textarea>
+                        <input type="text" name="specialization" placeholder="Specialisering" value="${profile.specialization || ''}" required>
+                        <input type="text" name="license" placeholder="Legitimationsnummer" value="${profile.license || ''}" required>
+                        <button type="submit">Spara profil</button>
+                        <button type="button" onclick="closeProfileEdit()" style="background-color: #95a5a6;">Avbryt</button>
+                    </form>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeProfileEdit() {
+            const modal = document.getElementById('profileEditModal');
+            if (modal) {
+                modal.remove();
+                document.getElementById('overlay').classList.remove('show');
+            }
+        }
+
+        function saveProfile(event, userId) {
+            event.preventDefault();
+            const form = event.target;
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userIndex = users.findIndex(u => u.id === userId);
+
+            if (userIndex !== -1) {
+                users[userIndex].profile = {
+                    phone: form.phone.value,
+                    address: form.address.value,
+                    city: form.city.value,
+                    education: form.education.value,
+                    experience: form.experience.value,
+                    specialization: form.specialization.value,
+                    license: form.license.value
+                };
+
+                localStorage.setItem('users', JSON.stringify(users));
+                closeProfileEdit();
+                updateProfilesList();
+            }
+        }
+
+        function deleteProfile(userId) {
+            if (!confirm('Är du säker på att du vill ta bort denna profil? Detta kommer inte ta bort användarkontot.')) {
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userIndex = users.findIndex(u => u.id === userId);
+
+            if (userIndex !== -1) {
+                delete users[userIndex].profile;
+                localStorage.setItem('users', JSON.stringify(users));
+                updateProfilesList();
+            }
+        }
+
+        function quickApply(event) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (!currentUser) {
+                showRegisterPrompt();
+                return;
+            }
+
+            const jobListing = event.target.closest('.job-listing');
+            const rangeStart = "1"; // Default värde för snabbansökan
+            const rangeEnd = "52"; // Default värde för snabbansökan
+
+            const quickApplication = {
+                id: Date.now().toString(),
+                jobTitle: jobListing.querySelector('.job-title').textContent,
+                company: jobListing.querySelector('.job-company').textContent,
+                location: jobListing.querySelector('.detail-value').textContent,
+                email: currentUser.email,
+                name: currentUser.name,
+                phone: currentUser.phone || '',
+                semester: currentUser.semester || '',
+                availabilityStart: currentUser.availabilityStart || rangeStart,
+                availabilityEnd: currentUser.availabilityEnd || rangeEnd,
+                date: new Date().toISOString(),
+                type: 'quick',
+                status: 'pending'
+            };
+
+            // Spara i localStorage
+            const quickApplications = JSON.parse(localStorage.getItem('quickApplications') || '[]');
+            quickApplications.push(quickApplication);
+            localStorage.setItem('quickApplications', JSON.stringify(quickApplications));
+
+            // Visa bekräftelse
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('successNotification').classList.add('show');
+        }
+
+        function showRegisterPrompt() {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('registerPrompt').classList.add('show');
+        }
+
+        function hideRegisterPrompt() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('registerPrompt').classList.remove('show');
+        }
+
+        function closeSuccessNotification() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('successNotification').classList.remove('show');
+        }
+
+        // Lägg till event listener för att stänga med Escape-tangenten
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideRegisterPrompt();
+                closeSuccessNotification();
+            }
+        });
+
+        // Lägg till event listener för att stänga när man klickar utanför
+        document.getElementById('overlay').addEventListener('click', function(event) {
+            if (event.target === this) {
+                hideRegisterPrompt();
+                closeSuccessNotification();
+            }
+        });
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+
+            // Stäng dropdown när man klickar utanför
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!e.target.closest('.profile-icon-container')) {
+                    dropdown.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+
+        function getNotificationCount() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return 0;
+
+            // Hämta användarens ansökningar
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const userApplications = applications.filter(app => app.email === currentUser.email);
+            
+            // Räkna olästa notifikationer (t.ex. nya statusuppdateringar)
+            const unreadCount = userApplications.filter(app => !app.isRead).length;
+            
+            return unreadCount;
+        }
+
+        function initializeSliders() {
+            const forms = document.querySelectorAll('.application-form');
+            
+            forms.forEach(form => {
+                const rangeStart = form.querySelector('.range-start');
+                const rangeEnd = form.querySelector('.range-end');
+                const startValue = form.querySelector('.start-value');
+                const endValue = form.querySelector('.end-value');
+                const range = form.querySelector('.slider-range');
+
+                function updateRange() {
+                    const start = parseInt(rangeStart.value);
+                    const end = parseInt(rangeEnd.value);
+                    
+                    if (start > end) {
+                        [rangeStart.value, rangeEnd.value] = [end, start];
+                    }
+                    
+                    const left = (start / 52) * 100;
+                    const right = (end / 52) * 100;
+                    
+                    range.style.left = left + '%';
+                    range.style.width = (right - left) + '%';
+                    
+                    startValue.textContent = `Vecka ${rangeStart.value}`;
+                    endValue.textContent = `Vecka ${rangeEnd.value}`;
+                }
+
+                rangeStart.addEventListener('input', updateRange);
+                rangeEnd.addEventListener('input', updateRange);
+                
+                // Initialisera värdena
+                updateRange();
+            });
+        }
+
+        // Lägg till i befintliga eventListeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSliders();
+            // ... existing DOMContentLoaded code ...
+        });
+    </script>
+</body>
+</html>
+
+_file>
