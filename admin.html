@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Vårdbasen.se</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2d535d;
+            --secondary-color: #3a7d8c;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #e0e0e0;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+            cursor: pointer;
+        }
+
+        .back-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--light-text);
+            font-weight: 500;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-tab.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .admin-content {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .admin-form input,
+        .admin-form textarea {
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .admin-form button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .application-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .accept-btn, .reject-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .accept-btn:hover {
+            background-color: #27ae60;
+        }
+
+        .reject-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .reject-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">
+            <img src="logo.svg" alt="Vårdbasen.se" class="logo" onclick="window.location.href='index.html'">
+            <h1>Admin Panel</h1>
+        </div>
+        <a href="index.html" class="back-button" onclick="window.location.href='index.html'; return false;">Tillbaka till startsidan</a>
+    </div>
+
+    <div class="admin-container">
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="showAdminTab('applications')">Ansökningar</button>
+            <button class="admin-tab" onclick="showAdminTab('jobs')">Hantera jobb</button>
+            <button class="admin-tab" onclick="showAdminTab('users')">Användare</button>
+            <button class="admin-tab" onclick="showAdminTab('profiles')">Profiler</button>
+        </div>
+
+        <div id="applications-tab" class="admin-content active">
+            <h2>Ansökningar</h2>
+            <div class="applications-list" id="applicationsList"></div>
+        </div>
+
+        <div id="jobs-tab" class="admin-content">
+            <h2>Lägg till ny jobbannons</h2>
+            <form class="admin-form" onsubmit="createNewJob(event)">
+                <input type="text" id="jobTitle" placeholder="Jobbtitel" required>
+                <input type="text" id="company" placeholder="Företag" required>
+                <input type="text" id="location" placeholder="Plats" required>
+                <input type="text" id="salary" placeholder="Lön (ex: 35 000 kr/månad)" required>
+                <input type="text" id="workHours" placeholder="Arbetstid (ex: 40 timmar/vecka)" required>
+                <input type="text" id="profession" placeholder="Yrke" required>
+                <button type="submit">Lägg till annons</button>
+            </form>
+
+            <h2 style="margin-top: 2rem;">Befintliga annonser</h2>
+            <div id="jobsList"></div>
+        </div>
+
+        <div id="users-tab" class="admin-content">
+            <h2>Registrerade användare</h2>
+            <div id="usersList"></div>
+        </div>
+
+        <div id="profiles-tab" class="admin-content">
+            <h2>Registrerade profiler</h2>
+            <div class="profile-filters" style="margin: 2rem 0;">
+                <select id="profileFilter" onchange="filterProfiles()">
+                    <option value="all">Alla profiler</option>
+                    <option value="complete">Kompletta profiler</option>
+                    <option value="incomplete">Ofullständiga profiler</option>
+                </select>
+            </div>
+            <div id="profilesList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Återanvänd alla admin-relaterade funktioner från index.html
+        function showAdminTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.admin-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const selectedTab = document.querySelector(`.admin-tab[onclick*="${tabName}"]`);
+            const selectedContent = document.getElementById(`${tabName}-tab`);
+            
+            selectedTab.classList.add('active');
+            selectedContent.classList.add('active');
+
+            if (tabName === 'jobs') {
+                updateJobsList();
+            } else if (tabName === 'users') {
+                updateUsersList();
+            } else if (tabName === 'profiles') {
+                updateProfilesList();
+            } else if (tabName === 'applications') {
+                updateApplicationsList();
+            }
+        }
+
+        // Initiera data från localStorage
+        if (!localStorage.getItem('applications')) {
+            localStorage.setItem('applications', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('jobs')) {
+            localStorage.setItem('jobs', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([]));
+        }
+
+        // Återanvänd alla nödvändiga funktioner från index.html
+        function updateApplicationsList() {
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const quickApplications = JSON.parse(localStorage.getItem('quickApplications') || '[]');
+            const applicationsList = document.getElementById('applicationsList');
+            
+            // Kombinera och sortera ansökningar efter datum
+            const allApplications = [...applications, ...quickApplications]
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            if (allApplications.length === 0) {
+                applicationsList.innerHTML = '<p>Inga ansökningar att visa</p>';
+                return;
+            }
+
+            applicationsList.innerHTML = allApplications.map(app => `
+                <div class="application-card">
+                    <h3>${app.jobTitle}</h3>
+                    <div class="application-details">
+                        <p><strong>Plats:</strong> ${app.location}</p>
+                        <p><strong>E-post:</strong> ${app.email}</p>
+                        <p><strong>Telefon:</strong> ${app.phone || '0'}</p>
+                        <p><strong>Meddelande:</strong> ${app.message || 'Hej'}</p>
+                        <p><strong>Termin:</strong> ${app.semester}</p>
+                        ${app.availabilityStart && app.availabilityEnd ? 
+                            `<p><strong>Tillgänglig:</strong> Vecka ${app.availabilityStart} - ${app.availabilityEnd}</p>` : 
+                            ''}
+                        <p><strong>Datum:</strong> ${new Date(app.date).toLocaleString('sv-SE')}</p>
+                        <p><strong>Status:</strong> <span class="status-${app.status || 'pending'}">${getStatusText(app.status)}</span></p>
+                    </div>
+                    <div class="application-actions">
+                        <button onclick="updateApplicationStatus('${app.id}', 'accepted')" class="accept-btn">Acceptera</button>
+                        <button onclick="updateApplicationStatus('${app.id}', 'rejected')" class="reject-btn">Avvisa</button>
+                        <button onclick="deleteApplication('${app.id}', '${app.type || 'regular'}')" class="delete-btn">
+                            <i class="fas fa-trash"></i> Ta bort
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'accepted':
+                    return 'Accepterad';
+                case 'rejected':
+                    return 'Nekad';
+                default:
+                    return 'Väntande';
+            }
+        }
+
+        function updateApplicationStatus(id, status) {
+            const applications = JSON.parse(localStorage.getItem('applications'));
+            const application = applications.find(app => app.id === id);
+            
+            if (application) {
+                application.status = status;
+                localStorage.setItem('applications', JSON.stringify(applications));
+                updateApplicationsList();
+            }
+        }
+
+        function updateJobsList() {
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            const jobsList = document.getElementById('jobsList');
+            
+            jobsList.innerHTML = jobs.map(job => `
+                <div class="info-card">
+                    <h3>${job.title} - ${job.company}</h3>
+                    <p><strong>Plats:</strong> ${job.location}</p>
+                    <p><strong>Lön:</strong> ${job.salary}</p>
+                    <p><strong>Arbetstid:</strong> ${job.workHours}</p>
+                    <button onclick="deleteJob(${job.id})" 
+                            style="background-color: #e74c3c; color: white; padding: 0.5rem 1rem;
+                            border: none; border-radius: 5px; cursor: pointer; margin-top: 1rem;">
+                        Ta bort
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function createNewJob(event) {
+            event.preventDefault();
+            
+            const newJob = {
+                id: Date.now(),
+                title: document.getElementById('jobTitle').value,
+                company: document.getElementById('company').value,
+                location: document.getElementById('location').value,
+                salary: document.getElementById('salary').value,
+                workHours: document.getElementById('workHours').value,
+                profession: document.getElementById('profession').value
+            };
+
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            jobs.push(newJob);
+            localStorage.setItem('jobs', JSON.stringify(jobs));
+
+            event.target.reset();
+            updateJobsList();
+        }
+
+        function deleteJob(jobId) {
+            if (!confirm('Är du säker på att du vill ta bort denna jobbannons?')) {
+                return;
+            }
+
+            const jobs = JSON.parse(localStorage.getItem('jobs'));
+            const updatedJobs = jobs.filter(job => job.id !== jobId);
+            localStorage.setItem('jobs', JSON.stringify(updatedJobs));
+            updateJobsList();
+        }
+
+        function updateUsersList() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const usersList = document.getElementById('usersList');
+            
+            usersList.innerHTML = users.map(user => {
+                const userApplications = JSON.parse(localStorage.getItem('applications'))
+                    .filter(app => app.email === user.email);
+                
+                return `
+                    <div class="info-card">
+                        <h3>${user.name}</h3>
+                        <p><strong>E-post:</strong> ${user.email}</p>
+                        <p><strong>Antal ansökningar:</strong> ${userApplications.length}</p>
+                        <div class="user-applications">
+                            <h4>Användarens ansökningar:</h4>
+                            ${userApplications.map(app => `
+                                <div style="margin: 10px 0; padding: 10px; border-left: 3px solid var(--primary-color);">
+                                    <p><strong>Jobb:</strong> ${app.jobTitle}</p>
+                                    <p><strong>Status:</strong> ${app.status}</p>
+                                    <p><strong>Datum:</strong> ${new Date(app.timestamp).toLocaleDateString()}</p>
+                                </div>
+                            `).join('') || '<p>Inga ansökningar än.</p>'}
+                        </div>
+                        <button onclick="deleteUser(${user.id})" 
+                                style="background-color: #e74c3c; color: white; padding: 0.5rem 1rem;
+                                border: none; border-radius: 5px; cursor: pointer; margin-top: 1rem;">
+                            Ta bort användare
+                        </button>
+                    </div>
+                `;
+            }).join('') || '<p>Inga registrerade användare.</p>';
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('Är du säker på att du vill ta bort denna användare? Detta kommer även ta bort alla användarens ansökningar.')) {
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userToDelete = users.find(user => user.id === userId);
+            
+            if (userToDelete) {
+                const updatedUsers = users.filter(user => user.id !== userId);
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+
+                const applications = JSON.parse(localStorage.getItem('applications'));
+                const updatedApplications = applications.filter(app => app.email !== userToDelete.email);
+                localStorage.setItem('applications', JSON.stringify(updatedApplications));
+
+                updateUsersList();
+                updateApplicationsList();
+            }
+        }
+
+        function updateProfilesList() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const profilesList = document.getElementById('profilesList');
+            const filter = document.getElementById('profileFilter').value;
+            
+            const filteredUsers = users.filter(user => {
+                if (filter === 'all') return true;
+                const completeness = calculateProfileCompleteness(user);
+                return filter === 'complete' ? completeness === 100 : completeness < 100;
+            });
+
+            profilesList.innerHTML = filteredUsers.map(user => {
+                const profile = user.profile || {};
+                const completeness = calculateProfileCompleteness(user);
+                
+                return `
+                    <div class="info-card">
+                        <h3>${user.name}</h3>
+                        <p><strong>Profil komplett:</strong> ${completeness}%</p>
+                        <p><strong>E-post:</strong> ${user.email}</p>
+                        <p><strong>Telefon:</strong> ${profile.phone || 'Ej angivet'}</p>
+                        <p><strong>Adress:</strong> ${profile.address || 'Ej angivet'}</p>
+                        <p><strong>Stad:</strong> ${profile.city || 'Ej angivet'}</p>
+                        <p><strong>Utbildning:</strong> ${profile.education || 'Ej angivet'}</p>
+                        <p><strong>Erfarenhet:</strong> ${profile.experience || 'Ej angivet'}</p>
+                        <p><strong>Specialisering:</strong> ${profile.specialization || 'Ej angivet'}</p>
+                        <p><strong>Legitimation:</strong> ${profile.license || 'Ej angivet'}</p>
+                        <button onclick="deleteProfile(${user.id})"
+                                style="background-color: #e74c3c; color: white; padding: 0.5rem 1rem;
+                                border: none; border-radius: 5px; cursor: pointer; margin-top: 1rem;">
+                            Ta bort profil
+                        </button>
+                    </div>
+                `;
+            }).join('') || '<p>Inga profiler hittades.</p>';
+        }
+
+        function calculateProfileCompleteness(user) {
+            const profile = user.profile || {};
+            const requiredFields = ['phone', 'address', 'city', 'education', 'experience', 'specialization', 'license'];
+            const completedFields = requiredFields.filter(field => profile[field] && profile[field].trim() !== '');
+            return Math.round((completedFields.length / requiredFields.length) * 100);
+        }
+
+        function deleteProfile(userId) {
+            if (!confirm('Är du säker på att du vill ta bort denna profil? Detta kommer inte ta bort användarkontot.')) {
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userIndex = users.findIndex(u => u.id === userId);
+
+            if (userIndex !== -1) {
+                delete users[userIndex].profile;
+                localStorage.setItem('users', JSON.stringify(users));
+                updateProfilesList();
+            }
+        }
+
+        function deleteApplication(id, type) {
+            if (!confirm('Är du säker på att du vill ta bort denna ansökan? Detta går inte att ångra.')) {
+                return;
+            }
+
+            const storageKey = type === 'quick' ? 'quickApplications' : 'applications';
+            const applications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const updatedApplications = applications.filter(app => app.id !== id);
+            localStorage.setItem(storageKey, JSON.stringify(updatedApplications));
+            
+            updateApplicationsList();
+        }
+
+        // Initiera admin-panelen
+        updateApplicationsList();
+    </script>
+</body>
+</html> 

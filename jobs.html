@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mina jobb - Vårdbasen.se</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6B9B91;
+            --secondary-color: #7fb3a8;
+            --text-color: #333333;
+            --light-text: #666666;
+            --border-color: #dae5e3;
+            --white: #ffffff;
+            --shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+            --background-light: #f8f8f8;
+            --background-accent: rgba(51, 51, 51, 0.03);
+            --border-accent: rgba(51, 51, 51, 0.1);
+            --status-pending: #ffd700;
+            --status-accepted: #4CAF50;
+            --status-rejected: #f44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-color);
+        }
+
+        header {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border-accent);
+            box-shadow: 0 2px 10px rgba(51, 51, 51, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+        }
+
+        .header-content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            width: auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-right: 2rem;
+        }
+
+        .header-button {
+            background-color: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 44px;
+            box-sizing: border-box;
+            line-height: 1.2;
+        }
+
+        .header-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .jobs-container {
+            max-width: 1000px;
+            margin: 100px auto 2rem;
+            padding: 2rem;
+        }
+
+        .jobs-header {
+            margin-bottom: 2rem;
+        }
+
+        .jobs-header h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .jobs-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .job-card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .job-company {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .job-status {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: var(--status-pending);
+            color: var(--text-color);
+        }
+
+        .status-accepted {
+            background: var(--status-accepted);
+            color: white;
+        }
+
+        .status-rejected {
+            background: var(--status-rejected);
+            color: white;
+        }
+
+        .job-details {
+            display: grid;
+            gap: 0.5rem;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .job-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .no-jobs {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            color: var(--light-text);
+        }
+
+        .no-jobs i {
+            font-size: 3rem;
+            color: var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .job-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .delete-button {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--status-rejected);
+            background: transparent;
+            color: var(--status-rejected);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .delete-button:hover {
+            background: var(--status-rejected);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-container">
+                <a href="index.html" style="text-decoration: none; height: 100%; display: flex; align-items: center;">
+                    <img src="Vårdbasen ny.png" alt="Vårdbasen.se" class="logo">
+                </a>
+            </div>
+            <div class="header-buttons">
+                <!-- Knappar läggs till dynamiskt via JavaScript -->
+            </div>
+        </div>
+    </header>
+
+    <div class="jobs-container">
+        <div class="jobs-header">
+            <h1>Mina jobbansökningar</h1>
+            <p>Här kan du se status på dina ansökningar</p>
+        </div>
+
+        <div class="jobs-list" id="jobsList">
+            <!-- Kommer att fyllas i dynamiskt med JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Kontrollera om användaren är inloggad
+        function checkAuth() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                window.location.href = 'index.html';
+                return null;
+            }
+            return currentUser;
+        }
+
+        // Uppdatera header-knappar
+        function updateAuthUI() {
+            const currentUser = checkAuth();
+            const headerButtons = document.querySelector('.header-buttons');
+
+            if (currentUser) {
+                headerButtons.innerHTML = `
+                    <button class="header-button" onclick="logout()">Logga ut</button>
+                    ${currentUser.role === 'admin' ? '<a href="admin.html" class="header-button">Admin</a>' : ''}
+                `;
+            }
+        }
+
+        // Hämta och visa användarens jobbansökningar
+        function displayJobs() {
+            const currentUser = checkAuth();
+            if (!currentUser) return;
+
+            // Hämta både vanliga ansökningar och snabbsökningar
+            const applications = JSON.parse(localStorage.getItem('applications') || '[]');
+            const quickApplications = JSON.parse(localStorage.getItem('quickApplications') || '[]');
+            
+            // Kombinera och filtrera för aktuell användare
+            const userApplications = [
+                ...applications.filter(app => app.email === currentUser.email).map(app => ({...app, type: 'regular'})),
+                ...quickApplications.filter(app => app.email === currentUser.email).map(app => ({...app, type: 'quick'}))
+            ];
+
+            const jobsList = document.getElementById('jobsList');
+
+            if (userApplications.length === 0) {
+                jobsList.innerHTML = `
+                    <div class="no-jobs">
+                        <i class="fas fa-briefcase"></i>
+                        <h2>Inga ansökningar än</h2>
+                        <p>Du har inte sökt några jobb ännu. Gå till startsidan för att hitta lediga tjänster.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sortera efter datum, nyaste först
+            userApplications.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            jobsList.innerHTML = userApplications.map(app => `
+                <div class="job-card" id="job-${app.type}-${app.id}">
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">${app.jobTitle}</div>
+                            <div class="job-company">${app.company}</div>
+                        </div>
+                        <span class="job-status status-${app.status || 'pending'}">
+                            ${getStatusText(app.status)}
+                        </span>
+                    </div>
+                    <div class="job-details">
+                        <div class="job-detail">
+                            <i class="fas fa-calendar"></i>
+                            Ansökt: ${new Date(app.date).toLocaleDateString('sv-SE')}
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${app.location}
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-graduation-cap"></i>
+                            Termin: ${app.semester}
+                        </div>
+                        <div class="job-detail">
+                            <i class="fas fa-paper-plane"></i>
+                            ${app.type === 'quick' ? 'Snabbansökan' : 'Fullständig ansökan'}
+                        </div>
+                    </div>
+                    <div class="job-actions">
+                        <button class="delete-button" onclick="deleteApplication('${app.type}', '${app.id}')">
+                            <i class="fas fa-trash"></i>
+                            Ta bort ansökan
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Hjälpfunktion för att få statustext
+        function getStatusText(status) {
+            switch(status) {
+                case 'accepted':
+                    return 'Accepterad';
+                case 'rejected':
+                    return 'Nekad';
+                default:
+                    return 'Väntande';
+            }
+        }
+
+        // Ta bort en ansökan
+        function deleteApplication(type, id) {
+            if (!confirm('Är du säker på att du vill ta bort denna ansökan?')) {
+                return;
+            }
+
+            const storageKey = type === 'quick' ? 'quickApplications' : 'applications';
+            const applications = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const updatedApplications = applications.filter(app => app.id !== id);
+            localStorage.setItem(storageKey, JSON.stringify(updatedApplications));
+
+            // Animera bort kortet och uppdatera listan
+            const card = document.getElementById(`job-${type}-${id}`);
+            card.style.transition = 'all 0.3s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateX(20px)';
+            
+            setTimeout(() => {
+                displayJobs();
+            }, 300);
+        }
+
+        // Logga ut
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Initialisera sidan
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            updateAuthUI();
+            displayJobs();
+        });
+    </script>
+</body>
+</html> 
